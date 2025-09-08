@@ -5,6 +5,12 @@ import (
 	"time"
 )
 
+// struct embedding
+type User struct {
+	Name  string
+	phone int
+}
+
 type Reservation struct {
 	id           int
 	Name         string
@@ -12,6 +18,7 @@ type Reservation struct {
 	createdAt    time.Time
 	availability string
 	price        float64
+	User
 }
 
 // constructor with pointer receiver
@@ -38,6 +45,19 @@ type Reservation struct {
 
 func main() {
 
+	// object of struct embedding
+	hotel := Reservation{
+		id:    1,
+		Name:  "Mubashir",
+		Email: "mubashir030601@gmail.com",
+		User: User{
+			Name:  "Mubashir",
+			phone: 123456,
+		},
+	}
+	hotel.phone = 987654
+	fmt.Println(hotel.phone)
+
 	// centerPort := Reservation{
 	// 	id:           1,
 	// 	Name:         "Mubashir",
@@ -60,11 +80,12 @@ func main() {
 	// 	price float64
 	// }{1, "Mubashir", 500.00}
 
-	fmt.Println("Hello Structs")
 	// struct with pointer
 
 	// func ( res *Reservation ) getStatus(availability string)  {
 
 	// }
+
+	//Struct embedding
 
 }
