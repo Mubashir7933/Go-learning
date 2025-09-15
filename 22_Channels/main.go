@@ -12,17 +12,30 @@ import "fmt"
 
 //recieving data from channel
 
-func nums(result chan int, a int, b int) {
-	numResult := a + b
-	result <- numResult
+// func nums(result chan int, a int, b int) {
+// 	numResult := a + b
+// 	result <- numResult
 
+// }
+
+func task(done chan bool) {
+
+	defer func() {
+		done <- true
+	}()
+	fmt.Println("Task is done....")
 }
 
 func main() {
-	result := make(chan int)
-	go nums(result, 10, 20)
-	resNum := <-result
-	fmt.Println(resNum)
+
+	done := make(chan bool)
+	go task(done)
+	<-done // waiting for the task to be done
+	fmt.Println("Main function is done....")
+	// 	result := make(chan int)
+	// 	go nums(result, 10, 20)
+	// 	resNum := <-result
+	// 	fmt.Println(resNum)
 	// channels are a way to communicate between go routines
 	// numChan := make(chan int)
 	// go processNumber(numChan)
