@@ -18,20 +18,25 @@ import "fmt"
 
 // }
 
-func task(done chan bool) {
+func task(done chan string) {
 
-	defer func() {
-		done <- true
-	}()
-	fmt.Println("Task is done....")
+	done <- "This is for the practice of channels"
+
+}
+
+func doneTask(done chan string) {
+	msg := <-done
+	fmt.Println("Now the channel send the message and done task recieved it", msg)
 }
 
 func main() {
 
-	done := make(chan bool)
+	done := make(chan string)
 	go task(done)
-	<-done // waiting for the task to be done
+	go doneTask(done) // we need to pass channels as the parameters
+	// waiting for the task to be done
 	fmt.Println("Main function is done....")
+	fmt.Scanln()
 	// 	result := make(chan int)
 	// 	go nums(result, 10, 20)
 	// 	resNum := <-result
