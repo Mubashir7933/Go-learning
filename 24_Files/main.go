@@ -1,5 +1,11 @@
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
+
 func main() {
 	// f, error := os.Open("textFile.txt")
 	// if error != nil {
@@ -57,4 +63,58 @@ func main() {
 	// 	fmt.Println(file.Name(), file.IsDir(), file.Size(), file.Mode())
 	// }
 
+	//Creating and writing files
+
+	file, err := os.Create("TestNew.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	defer file.Close()
+
+	// file.WriteString("This is a new file created by golang")
+	// //if we add something more it'll work as append mode
+	// file.WriteString("\nThis is the second line")
+
+	//passing as bytes
+
+	// bytes := []byte("\nThis is a new line added as bytes")
+	// file.Write(bytes)
+
+	//Read and Write to another file
+
+	//First extracting data from the sourceFile
+	sourceFile, err := os.Open("textFile.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer sourceFile.Close()
+
+	//Now creating a destination file where the data is going to be placed
+	destinationFile, err := os.Create("destination.txt")
+	if err != nil {
+		panic(err)
+	}
+
+	defer destinationFile.Close()
+
+	reader := bufio.NewReader(sourceFile)
+	writer := bufio.NewWriter(destinationFile)
+
+	for {
+		b, err := reader.ReadByte()
+		if err != nil {
+			// Now we have to handle the EOF page error in order to not stuck in infinite loop
+			if err.Error() != "EOF" {
+				panic(err)
+			}
+			break
+		}
+		e := writer.WriteByte(b)
+		if e != nil {
+			panic(e)
+		}
+	}
+	writer.Flush() //to ensure all the data is written to the file
+	fmt.Println("File copied successfully")
 }
